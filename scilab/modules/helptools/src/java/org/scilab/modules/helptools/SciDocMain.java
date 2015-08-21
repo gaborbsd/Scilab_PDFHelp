@@ -148,7 +148,7 @@ public final class SciDocMain {
                     converter = new CHMDocbookTagConverter(sourceDoc, this, imgConvert);
                     break;
                 case FO:
-                    converter = new FODocbookTagConverter(sourceDoc, this, imgConvert);
+                	converter = new StandaloneFODocBookTagConverter(sourceDoc, imgConvert);
                     break;
                 case JAR_ONLY:
                     converter = new JarOnlyConverter(this);
