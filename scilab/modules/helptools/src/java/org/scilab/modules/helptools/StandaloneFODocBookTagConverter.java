@@ -1,5 +1,6 @@
 package org.scilab.modules.helptools;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,20 +94,35 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 		
 		VARLISTENTRY_LISTITEM_ATTRS.put("margin-left", "0.25in");
 	}
+	
+	public final String outDir;
 
 	public StandaloneFODocBookTagConverter(String inName, DocbookElement elem, ImageConverter imgConvert)
 			throws IOException {
 		super(inName, elem, imgConvert);
+		this.outDir = "c:\\__work\\_sci\\";
 	}
 
 	public StandaloneFODocBookTagConverter(String in, ImageConverter imgConvert) throws IOException {
 		super(in, imgConvert);
+		this.outDir = "c:\\__work\\_sci\\";
 	}
 
+    public void createFOFile(final String fileName, final String contents) {
+    	try (FileWriter writer = new FileWriter(outDir + fileName);) {
+			writer.append(contents);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
 	private String generateAttributeList(Map<String, String> attrs) {
 		if (attrs == null || attrs.size() == 0)
 			return "";
 		StringBuilder sb = new StringBuilder();
+		if (!attrs.isEmpty())
+			sb.append(' ');
 		for (Entry<String, String> e : attrs.entrySet()) {
 			sb.append(e.getKey());
 			sb.append("=\"");
@@ -118,15 +134,18 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 	
 	private String generateXMLElement(String name, String content, Map<String, String> attrs, Map<String, String> extraAttrs) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<");
+		sb.append('<');
 		sb.append(name);
 		sb.append(generateAttributeList(attrs));
 		sb.append(generateAttributeList(extraAttrs));
 		if (content == null || content.trim().equals(""))
 			sb.append("/>");
 		else {
+			sb.append('>');
 			sb.append(content);
-			sb.append(">");
+			sb.append('<');
+			sb.append(name);
+			sb.append('>');
 		}
 		return sb.toString();
 	}
@@ -185,7 +204,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleBook(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -200,7 +219,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleChapter(Map<String, String> attributes, String contents) throws SAXException {
-        return "";
+        return contents;
 	}
 
 	@Override
@@ -242,7 +261,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleImageobject(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -252,7 +271,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleInfo(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -263,17 +282,17 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 	@Override
 	public String handleInformaltable(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public String handleInlinemediaobject(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
 	public String handleItemizedlist(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -317,12 +336,12 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleMediaobject(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
 	public String handleMember(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -337,7 +356,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleOrderedlist(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -347,7 +366,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handlePart(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -363,29 +382,30 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 	@Override
 	public String handleQandaentry(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public String handleQandaset(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public String handleQuestion(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public String handleRefentry(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		createFOFile("docs.fo", contents);
+		return null;
 	}
 
 	@Override
 	public String handleRefnamediv(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -400,12 +420,12 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleRefsection(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
 	public String handleRefsynopsisdiv(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -415,20 +435,19 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleRevdescription(Map<String, String> attributes, String contents) throws SAXException {
-		// TODO Auto-generated method stub
-		return null;
+		return contents;
 	}
 
 	@Override
 	public String handleRevhistory(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return contents;
 	}
 
 	@Override
 	public String handleRevision(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return contents;
 	}
 
 	@Override
@@ -439,7 +458,7 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 	@Override
 	public String handleRevremark(Map<String, String> attributes, String contents) throws SAXException {
 		// TODO Auto-generated method stub
-		return null;
+		return contents;
 	}
 
 	@Override
@@ -455,12 +474,12 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleSection(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
 	public String handleSimplelist(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
@@ -552,12 +571,12 @@ public class StandaloneFODocBookTagConverter extends DocbookTagConverter {
 
 	@Override
 	public String handleVariablelist(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
 	public String handleVarlistentry(Map<String, String> attributes, String contents) throws SAXException {
-		return "";
+		return contents;
 	}
 
 	@Override
